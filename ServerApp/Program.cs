@@ -7,6 +7,7 @@ using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 using ServerApp.Grains;
+using ServerApp.Configuration;
 
 namespace ConsoleApp
 {
@@ -31,7 +32,8 @@ namespace ConsoleApp
                             options.ServiceId = "ServerApp";
                         })
                         .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
-                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(UserGrain).Assembly).WithReferences());
+                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(UserGrain).Assembly).WithReferences())
+                        .AddKafkaConfig();
                 })
                 .ConfigureServices(services =>
                 {
@@ -45,6 +47,9 @@ namespace ConsoleApp
                     builder.AddConsole();
                 })
                 .RunConsoleAsync();
+
+            var kafkaProvider = GetStreamProvider("KafkaStreamProvider");
+            var testStream = kafkaProvider.GetStream<TestModel>("streamId", "topic1");
         }
     }
 }

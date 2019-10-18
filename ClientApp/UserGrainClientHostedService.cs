@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Interfaces;
+using Domain.Specifications;
 using Microsoft.Extensions.Hosting;
 using Orleans;
 
@@ -20,13 +21,21 @@ namespace ClientApp
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            //var streamProvider = client.GetStreamProvider("KafkaStreamProvider");
+            //var stream = streamProvider.GetStream<SimpleResultSpecification>(Guid.Empty, "testTopic");
+            
+
             // example of calling grains from the initialized client
             for (var i = 0; i <= 200; i++)
             {
-                var msg = $"Message{i}";
                 var user = this.client.GetGrain<IUserGrain>(i);
-                var response = await user.SayHello(msg);
-                Console.WriteLine(response);
+                var result = await user.SayHello($"Message{i}");
+                //await stream.OnNextAsync(new SimpleResultSpecification
+                //{
+                //    Value = i
+                //});
+                //
+                Console.WriteLine(result);
             }
             Console.ReadLine();
         }

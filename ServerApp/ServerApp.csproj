@@ -17,15 +17,12 @@
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="2.4.3" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="2.4.3" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="2.4.3" />
+    <PackageReference Include="Orleans.Streams.Kafka" Version="2.0.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configuration\" />
   </ItemGroup>
 
 </Project>
