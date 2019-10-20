@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Grains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using ServerApp.Grains;
 using ServerApp.Configuration;
 
 namespace ConsoleApp
@@ -15,7 +15,7 @@ namespace ConsoleApp
     {
         static Task Main(string[] args)
         {
-            return new HostBuilder()
+            var builder = new HostBuilder()
                 .UseOrleans(builder =>
                 {
                     builder
@@ -47,9 +47,8 @@ namespace ConsoleApp
                     builder.AddConsole();
                 })
                 .RunConsoleAsync();
-
-            var kafkaProvider = GetStreamProvider("KafkaStreamProvider");
-            var testStream = kafkaProvider.GetStream<TestModel>("streamId", "topic1");
+            
+            return builder;
         }
     }
 }

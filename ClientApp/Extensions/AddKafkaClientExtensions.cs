@@ -1,6 +1,8 @@
-﻿using Domain.Constants;
+﻿using System.Collections.Generic;
+using Domain.Constants;
 using Orleans;
 using Orleans.Hosting;
+using Orleans.Streams.Kafka.Config;
 
 namespace ClientApp.Extensions
 {
@@ -13,10 +15,10 @@ namespace ClientApp.Extensions
                 .WithOptions(options =>
                 {
                     options.BrokerList = new[] { Constants.KafkaHost };
-                    options.ConsumerGroupId = "E2EGroup";
+                    options.ConsumerGroupId = "orleans-kafka";
+                    options.Topics = new List<TopicConfig> { new TopicConfig { Name = Constants.KafkaTopic } };
 
-                    options
-                        .AddTopic(Constants.KafkaTopic);
+                    //options.AddTopic(Constants.KafkaTopic);
                 })
                 .AddJson()
                 .Build();

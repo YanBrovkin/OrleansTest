@@ -11,19 +11,18 @@ namespace ServerApp.Configuration
     {
         public static ISiloBuilder AddKafkaConfig(this ISiloBuilder hostBuilder)
         {
-            var result = hostBuilder
-            //.ConfigureApplicationParts(parts => parts.AddApplicationPart(Assembly.Load("TestGrains")).WithReferences())
+            return hostBuilder
             .AddMemoryGrainStorage("PubSubStore")
-            .AddKafka("KafkaProvider")
+            .AddKafka("KafkaStreamProvider")
             .WithOptions(options =>
             {
                 options.BrokerList = new[] { Constants.KafkaHost };
-                options.ConsumerGroupId = "E2EGroup";
-                //options.ConsumeMode = ConsumeMode.StreamEnd;
+                options.ConsumerGroupId = "orleans-kafka";
                 options.Topics = new List<TopicConfig> { new TopicConfig { Name = Constants.KafkaTopic } };
                 options.MessageTrackingEnabled = true;
             })
             .AddJson()
+            .AddLoggingTracker()
             .Build();
         }
     }

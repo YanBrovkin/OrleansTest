@@ -21,21 +21,25 @@ namespace ClientApp
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            //var streamProvider = client.GetStreamProvider("KafkaStreamProvider");
-            //var stream = streamProvider.GetStream<SimpleResultSpecification>(Guid.Empty, "testTopic");
-            
+            var user = this.client.GetGrain<IUserGrain>(1);
+            await user.SayHello($"Message");
 
+            var streamProvider = client.GetStreamProvider("KafkaStreamProvider");
+            var stream = streamProvider.GetStream<string>(Guid.Empty, "testTopic");
+            Console.WriteLine("Ready to send messages ?");
+            Console.ReadLine();
+            //var user = this.client.GetGrain<IUserGrain>(1);
             // example of calling grains from the initialized client
             for (var i = 0; i <= 200; i++)
             {
-                var user = this.client.GetGrain<IUserGrain>(i);
-                var result = await user.SayHello($"Message{i}");
+                //var result = await user.SayHello($"Message{i}");
                 //await stream.OnNextAsync(new SimpleResultSpecification
                 //{
                 //    Value = i
                 //});
                 //
-                Console.WriteLine(result);
+                await stream.OnNextAsync($"Message: {i}");
+                //Console.WriteLine(result);
             }
             Console.ReadLine();
         }
