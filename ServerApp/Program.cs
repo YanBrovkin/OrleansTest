@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Grains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using ServerApp.Grains;
+using ServerApp.Configuration;
 
 namespace ConsoleApp
 {
@@ -14,7 +15,7 @@ namespace ConsoleApp
     {
         static Task Main(string[] args)
         {
-            return new HostBuilder()
+            var builder = new HostBuilder()
                 .UseOrleans(builder =>
                 {
                     builder
@@ -31,7 +32,8 @@ namespace ConsoleApp
                             options.ServiceId = "ServerApp";
                         })
                         .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
-                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(UserGrain).Assembly).WithReferences());
+                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(UserGrain).Assembly).WithReferences())
+                        .AddKafkaConfig();
                 })
                 .ConfigureServices(services =>
                 {
@@ -45,6 +47,8 @@ namespace ConsoleApp
                     builder.AddConsole();
                 })
                 .RunConsoleAsync();
+            
+            return builder;
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Runtime;
+using ClientApp.Extensions;
 
 namespace ClientApp
 {
@@ -18,6 +19,7 @@ namespace ClientApp
             Client = new ClientBuilder()
                 .UseLocalhostClustering()
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
+                //.AddKafkaConfig()
                 .Build();
         }
 
